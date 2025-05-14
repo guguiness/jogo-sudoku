@@ -2,12 +2,12 @@ import java.util.Objects;
 
 public class Celula {
     private Integer valor;
-    private boolean fixo;
+    private TipoCelula tipo;
     private boolean conflito;
 
-    public Celula(Integer valor, boolean fixo, boolean conflito) {
+    public Celula(Integer valor, TipoCelula tipo, boolean conflito) {
         this.valor = valor;
-        this.fixo = fixo;
+        this.tipo = tipo;
         this.conflito = conflito;
     }
 
@@ -19,12 +19,12 @@ public class Celula {
         this.valor = valor;
     }
 
-    public boolean isFixo() {
-        return fixo;
+    public TipoCelula getTipo() {
+        return tipo;
     }
 
-    public void setFixo(boolean fixo) {
-        this.fixo = fixo;
+    public void setTipo(TipoCelula tipo) {
+        this.tipo = tipo;
     }
 
     public boolean isConflito() {
@@ -40,19 +40,19 @@ public class Celula {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Celula celula = (Celula) o;
-        return fixo == celula.fixo && conflito == celula.conflito && Objects.equals(valor, celula.valor);
+        return tipo == celula.tipo && conflito == celula.conflito && Objects.equals(valor, celula.valor);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(valor, fixo, conflito);
+        return Objects.hash(valor, tipo, conflito);
     }
 
     @Override
     public String toString() {
         return "Celula{" +
                 "valor=" + valor +
-                ", fixo=" + fixo +
+                ", tipo=" + tipo +
                 ", conflito=" + conflito +
                 '}';
     }
