@@ -1,3 +1,5 @@
+package celula;
+
 import java.util.Objects;
 
 public class Celula {
@@ -50,7 +52,7 @@ public class Celula {
 
     @Override
     public String toString() {
-        return "Celula{" +
+        return "celula.Celula{" +
                 "valor=" + valor +
                 ", tipo=" + tipo +
                 ", conflito=" + conflito +
