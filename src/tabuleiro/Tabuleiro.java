@@ -41,6 +41,24 @@ public class Tabuleiro {
         this.celulas = celulas;
     }
 
+    public void visualizar() {
+        for(int i = 0; i < 9; i++) {
+            for(int j = 0; j < 9; j++) {
+                System.out.print(this.getCelulas()[i][j].getValor() + "\t");
+
+                // Quadrante vertical
+                if(j == 2 || j == 5)
+                    System.out.print("|\t");
+            }
+            // Quadrante horizontal
+            if(i == 2 || i == 5) {
+                System.out.println();
+                System.out.println("_\t_\t_\t \t_\t_\t_\t \t_\t_\t_\t");
+            }
+            System.out.println();
+        }
+    }
+
     public Celula[][] getCelulas() {
         return celulas;
     }
