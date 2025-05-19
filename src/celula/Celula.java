@@ -7,6 +7,11 @@ public class Celula {
     private TipoCelula tipo;
     private boolean conflito;
 
+    public Celula(Integer valor, TipoCelula tipo) {
+        this.valor = valor;
+        this.tipo = tipo;
+    }
+
     public Celula(Integer valor, TipoCelula tipo, boolean conflito) {
         this.valor = valor;
         this.tipo = tipo;

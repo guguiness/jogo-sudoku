@@ -10,10 +10,12 @@ import java.util.Objects;
 public class Tabuleiro {
     private Celula[][] celulas;
     private Estado estado;
+    private final int TAM_LINHA = 9;
+    private final int TAM_COLUNA = 9;
 
     // Formato do estado inicial: posiçãoLinha,posiçãoColuna,valor;...
     public Tabuleiro(String estadoInicial) {
-        Celula[][] celulas = new Celula[9][9];
+        Celula[][] celulas = new Celula[TAM_LINHA][TAM_COLUNA];
         String[] linhas = estadoInicial.split(";");
 
         for(Celula[] linha : celulas) {
@@ -57,6 +59,44 @@ public class Tabuleiro {
             }
             System.out.println();
         }
+    }
+
+    public boolean inserirValor(int posicaoLinha, int posicaoColuna, Celula cel) {
+        if(!celulas[posicaoLinha][posicaoColuna].getValor().equals(0)) {
+            return false;
+        }
+
+        boolean isConflito = rastrearConflito(posicaoLinha, posicaoColuna, cel);
+        cel.setConflito(isConflito);
+
+        celulas[posicaoLinha][posicaoColuna] = cel;
+        return true;
+    }
+
+    protected boolean rastrearConflito(int posicaoLinha, int posicaoColuna, Celula cel) {
+        Integer novoValor = cel.getValor();
+
+        for(int i = 0; i < TAM_LINHA; i++) {
+            if(celulas[i][posicaoColuna].getValor().equals(novoValor))
+                return true;
+        }
+
+        for(int i = 0; i < TAM_COLUNA; i++) {
+            if(celulas[posicaoLinha][i].getValor().equals(novoValor))
+                return true;
+        }
+
+        // Verificação no quadrante
+        int linhaInicioQuadrante = (int) (posicaoLinha / 3) * 3;
+        int colunaInicioQuadrante = (int) (posicaoColuna / 3) * 3;
+        for(int i = 0; i < linhaInicioQuadrante + 2; i++) {
+            for(int j = 0; j < colunaInicioQuadrante + 2; j++) {
+                if(celulas[i][j].getValor().equals(novoValor))
+                    return true;
+            }
+        }
+
+        return false;       // Sem conflitos
     }
 
     public Celula[][] getCelulas() {
