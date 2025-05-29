@@ -10,20 +10,22 @@ import java.util.Objects;
 public class Tabuleiro {
     private Celula[][] celulas;
     private Estado estado;
+    private final int TAM_LINHA = 9;
+    private final int TAM_COLUNA = 9;
 
     // Formato do estado inicial: posiçãoLinha,posiçãoColuna,valor;...
     public Tabuleiro(String estadoInicial) {
-        Celula[][] celulas = new Celula[9][9];
-        String[] linhas = estadoInicial.split(";");
+        Celula[][] celulas = new Celula[TAM_LINHA][TAM_COLUNA];
+        String[] celulasString = estadoInicial.split(";");
 
-        for(Celula[] linha : celulas) {
-            Arrays.fill(
-                    linha,
-                    new Celula(0, TipoCelula.VAZIO, false)
-            );
+        // Tabuleiro vazio
+        for(int i = 0; i < TAM_LINHA; i++) {
+            for(int j = 0; j < TAM_COLUNA; j++) {
+                celulas[i][j] = new Celula(0, i, j, TipoCelula.FIXO, false);
+            }
         }
 
-        for(String celula : linhas) {
+        for(String celula : celulasString) {
             int posicaoLinha = 0;
             int posicaoColuna = 1;
             int valor = 2;
@@ -33,7 +35,12 @@ public class Tabuleiro {
                     .map(Integer::parseInt)
                     .toList();
 
-            Celula novaCelulaFixa = new Celula(celulaDecomposta.get(valor), TipoCelula.FIXO, false);
+            Celula novaCelulaFixa = new Celula(
+                    celulaDecomposta.get(valor),
+                    celulaDecomposta.get(posicaoLinha),
+                    celulaDecomposta.get(posicaoColuna),
+                    TipoCelula.FIXO,
+                    false);
 
             celulas[celulaDecomposta.get(posicaoLinha)][celulaDecomposta.get(posicaoColuna)] = novaCelulaFixa;
         }
@@ -57,6 +64,44 @@ public class Tabuleiro {
             }
             System.out.println();
         }
+    }
+
+    public boolean inserirValor(int posicaoLinha, int posicaoColuna, Celula cel) {
+        if(!celulas[posicaoLinha][posicaoColuna].getValor().equals(0)) {
+            return false;
+        }
+
+        boolean isConflito = rastrearConflito(posicaoLinha, posicaoColuna, cel);
+        cel.setConflito(isConflito);
+
+        celulas[posicaoLinha][posicaoColuna] = cel;
+        return true;
+    }
+
+    protected boolean rastrearConflito(int posicaoLinha, int posicaoColuna, Celula cel) {
+        Integer novoValor = cel.getValor();
+
+        for(int i = 0; i < TAM_LINHA; i++) {
+            if(celulas[i][posicaoColuna].getValor().equals(novoValor))
+                return true;
+        }
+
+        for(int i = 0; i < TAM_COLUNA; i++) {
+            if(celulas[posicaoLinha][i].getValor().equals(novoValor))
+                return true;
+        }
+
+        // Verificação no quadrante
+        int linhaInicioQuadrante = (int) (posicaoLinha / 3) * 3;
+        int colunaInicioQuadrante = (int) (posicaoColuna / 3) * 3;
+        for(int i = 0; i < linhaInicioQuadrante + 2; i++) {
+            for(int j = 0; j < colunaInicioQuadrante + 2; j++) {
+                if(celulas[i][j].getValor().equals(novoValor))
+                    return true;
+            }
+        }
+
+        return false;       // Sem conflitos
     }
 
     public Celula[][] getCelulas() {
