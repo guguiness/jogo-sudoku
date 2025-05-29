@@ -16,16 +16,16 @@ public class Tabuleiro {
     // Formato do estado inicial: posiçãoLinha,posiçãoColuna,valor;...
     public Tabuleiro(String estadoInicial) {
         Celula[][] celulas = new Celula[TAM_LINHA][TAM_COLUNA];
-        String[] linhas = estadoInicial.split(";");
+        String[] celulasString = estadoInicial.split(";");
 
-        for(Celula[] linha : celulas) {
-            Arrays.fill(
-                    linha,
-                    new Celula(0, TipoCelula.VAZIO, false)
-            );
+        // Tabuleiro vazio
+        for(int i = 0; i < TAM_LINHA; i++) {
+            for(int j = 0; j < TAM_COLUNA; j++) {
+                celulas[i][j] = new Celula(0, i, j, TipoCelula.FIXO, false);
+            }
         }
 
-        for(String celula : linhas) {
+        for(String celula : celulasString) {
             int posicaoLinha = 0;
             int posicaoColuna = 1;
             int valor = 2;
@@ -35,7 +35,12 @@ public class Tabuleiro {
                     .map(Integer::parseInt)
                     .toList();
 
-            Celula novaCelulaFixa = new Celula(celulaDecomposta.get(valor), TipoCelula.FIXO, false);
+            Celula novaCelulaFixa = new Celula(
+                    celulaDecomposta.get(valor),
+                    celulaDecomposta.get(posicaoLinha),
+                    celulaDecomposta.get(posicaoColuna),
+                    TipoCelula.FIXO,
+                    false);
 
             celulas[celulaDecomposta.get(posicaoLinha)][celulaDecomposta.get(posicaoColuna)] = novaCelulaFixa;
         }
